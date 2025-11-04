@@ -1,0 +1,18 @@
+# 파일 이름: schedule-notification-check.yml
+name: Schedule Notification Check
+
+on:
+  schedule:
+    # 1분마다 실행
+    - cron: '*/1 * * * *'
+  workflow_dispatch: # 수동 실행을 위한 버튼 추가
+
+jobs:
+  check-schedules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Supabase Edge Function
+        run: |
+          curl -X POST "${{ secrets.SUPABASE_URL }}/functions/v1/scheduled-check" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Content-Type: application/json"

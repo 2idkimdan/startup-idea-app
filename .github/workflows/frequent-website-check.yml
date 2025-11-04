@@ -1,0 +1,18 @@
+# 파일 이름: frequent-website-check.yml
+name: Frequent Website Check
+
+on:
+  schedule:
+    # 5분마다 실행
+    - cron: '*/1 * * * *'
+  workflow_dispatch:
+
+jobs:
+  website-crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Supabase Edge Function
+        run: |
+          curl -X POST "${{ secrets.SUPABASE_URL }}/functions/v1/website-check" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Content-Type: application/json"
